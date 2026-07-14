@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La forma de mi escritura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4F0E6;
+    --paper:#FBF9F3;
+    --ink:#2A2520;
+    --ink-soft:#645C4E;
+    --line:#DBD2BE;
+    --line-strong:#C4B89E;
+
+    --c-cuento:#5F7A5A;
+    --c-novela:#A85C32;
+    --c-cronica:#B08A2E;
+    --c-poesia:#B23A2E;
+    --c-ensayo:#2E5C5C;
+    --c-autoficcion:#7A2E42;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    font-size:19px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'DM Mono', monospace;
+    letter-spacing:0.02em;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* ---------- NAV ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(244,240,230,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:760px; margin:0 auto; padding:16px 28px;
+    display:flex; align-items:baseline; justify-content:space-between; gap:16px;
+  }
+  .brand{
+    font-family:'Playfair Display', serif;
+    font-style:italic; font-weight:600;
+    font-size:19px;
+  }
+  .progress-track{
+    flex:1; max-width:220px;
+    height:2px; background:var(--line-strong);
+    position:relative; margin-left:24px; display:none;
+  }
+  .progress-track.show{ display:block; }
+  .progress-fill{
+    position:absolute; left:0; top:0; height:100%;
+    background:var(--ink); width:0%;
+    transition:width .35s ease;
+  }
+  .progress-label{
+    font-size:12px; color:var(--ink-soft); white-space:nowrap;
+  }
+
+  section{ display:none; }
+  section.active{ display:block; }
+
+  /* ---------- INTRO ---------- */
+  #screen-intro{ padding:96px 0 80px; }
+  .eyebrow{
+    font-size:12px; text-transform:uppercase; letter-spacing:0.16em;
+    color:var(--ink-soft); margin-bottom:18px;
+  }
+  #screen-intro h1{
+    font-size:44px; line-height:1.08; margin:0 0 22px;
+  }
+  #screen-intro p{
+    font-size:19px; color:var(--ink-soft); max-width:520px; margin:0 0 14px;
+  }
+  .genre-tags{
+    display:flex; flex-wrap:wrap; gap:8px; margin:34px 0 44px;
+  }
+  .genre-tag{
+    font-family:'DM Mono', monospace; font-size:12px;
+    padding:6px 12px; border:1px solid var(--line-strong);
+    color:var(--ink-soft);
+  }
+  .btn-primary{
+    background:var(--ink); color:var(--cream); border:none;
+    padding:15px 30px; font-size:16px; font-family:'DM Mono', monospace;
+    letter-spacing:0.02em;
+  }
+  .btn-primary:hover{ background:#443D33; }
+  .btn-ghost{
+    background:none; border:1px solid var(--line-strong); color:var(--ink);
+    padding:13px 24px; font-size:14px; font-family:'DM Mono', monospace;
+  }
+  .btn-ghost:hover{ border-color:var(--ink); }
+
+  /* ---------- QUIZ ---------- */
+  #screen-quiz{ padding:64px 0 100px; }
+  .q-number{
+    font-family:'DM Mono', monospace; font-size:13px; color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+  .q-text{
+    font-family:'Playfair Display', serif; font-weight:600;
+    font-size:30px; line-height:1.24; margin:0 0 38px; max-width:600px;
+  }
+  .options{ display:flex; flex-direction:column; gap:10px; }
+  .option{
+    display:flex; align-items:flex-start; gap:16px;
+    text-align:left;
+    background:var(--paper);
+    border:1px solid var(--line);
+    padding:18px 20px;
+    font-family:'EB Garamond', serif; font-size:18px; color:var(--ink);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .option:hover{ border-color:var(--ink); background:#fff; }
+  .option .letter{
+    font-family:'DM Mono', monospace; font-size:13px; color:var(--ink-soft);
+    border:1px solid var(--line-strong);
+    width:24px; height:24px; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    margin-top:2px;
+  }
+  .quiz-nav{
+    margin-top:40px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .back-btn{
+    background:none; border:none; color:var(--ink-soft);
+    font-family:'DM Mono', monospace; font-size:13px;
+    padding:8px 0; display:flex; align-items:center; gap:6px;
+  }
+  .back-btn:hover{ color:var(--ink); }
+  .back-btn[disabled]{ visibility:hidden; }
+
+  /* ---------- RESULT ---------- */
+  #screen-result{ padding:48px 0 100px; }
+  .paragraph-panel{
+    position:sticky; top:66px; z-index:20;
+    background:var(--paper);
+    border:1px solid var(--line-strong);
+    padding:30px 32px;
+    margin-bottom:36px;
+  }
+  .paragraph-panel .label{
+    font-family:'DM Mono', monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.14em; color:var(--ink-soft); margin-bottom:14px;
+  }
+  .paragraph-panel p{
+    font-family:'Playfair Display', serif; font-style:italic; font-weight:500;
+    font-size:21px; line-height:1.55; margin:0; color:var(--ink);
+  }
+
+  .tabs{
+    display:flex; gap:2px; border-bottom:1px solid var(--line); margin-bottom:32px;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    background:none; border:none; padding:12px 18px;
+    font-family:'DM Mono', monospace; font-size:13px; color:var(--ink-soft);
+    border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .tab-btn.active{ color:var(--ink); border-bottom-color:var(--ink); }
+
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  /* diagnostico */
+  .genre-bars{ display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
+  .genre-bar-row{ display:flex; align-items:center; gap:14px; }
+  .genre-bar-name{
+    width:150px; flex:none; font-size:14px; font-family:'DM Mono', monospace;
+  }
+  .genre-bar-track{
+    flex:1; height:10px; background:var(--line); position:relative;
+  }
+  .genre-bar-fill{ height:100%; }
+  .genre-bar-count{
+    width:16px; text-align:right; font-family:'DM Mono', monospace; font-size:13px; color:var(--ink-soft);
+  }
+
+  .diag-block{ margin-bottom:26px; }
+  .diag-kicker{
+    font-family:'DM Mono', monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.14em; color:var(--ink-soft); margin-bottom:10px;
+  }
+  .diag-block p{ margin:0; font-size:18px; }
+
+  /* cuadro respuestas */
+  table.answers{ width:100%; border-collapse:collapse; }
+  table.answers th{
+    text-align:left; font-family:'DM Mono', monospace; font-size:11px;
+    text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-soft);
+    border-bottom:1px solid var(--line-strong); padding:0 0 10px;
+  }
+  table.answers td{
+    padding:14px 0; border-bottom:1px solid var(--line); font-size:16px; vertical-align:top;
+  }
+  table.answers td:first-child{ color:var(--ink-soft); width:34px; font-family:'DM Mono', monospace; font-size:13px; }
+  .chip{
+    display:inline-block; font-family:'DM Mono', monospace; font-size:12px;
+    padding:4px 10px; color:#fff; white-space:nowrap;
+  }
+
+  /* generos accordion */
+  .genre-card{ border:1px solid var(--line); margin-bottom:10px; }
+  .genre-head{
+    width:100%; display:flex; align-items:center; justify-content:space-between;
+    background:var(--paper); border:none; padding:18px 20px;
+    font-family:'Playfair Display', serif; font-size:19px; font-weight:600;
+  }
+  .genre-head .dot{
+    width:10px; height:10px; display:inline-block; margin-right:12px;
+  }
+  .genre-head-left{ display:flex; align-items:center; }
+  .genre-head .chev{ font-family:'DM Mono', monospace; font-size:13px; color:var(--ink-soft); }
+  .genre-body{ display:none; padding:0 20px 22px 42px; }
+  .genre-body.open{ display:block; }
+  .genre-body ol{ margin:0; padding-left:18px; }
+  .genre-body li{ margin-bottom:8px; font-size:17px; }
+
+  .restart-row{ margin-top:56px; text-align:center; }
+
+  @media (max-width:640px){
+    #screen-intro h1{ font-size:32px; }
+    .q-text{ font-size:24px; }
+    .paragraph-panel{ top:60px; padding:22px 20px; }
+    .genre-bar-name{ width:110px; font-size:12px; }
+    .genre-body{ padding-left:22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">La forma de mi escritura</div>
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label mono" id="progressLabel"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section id="screen-intro" class="active">
+    <div class="eyebrow">Taller de escritura</div>
+    <h1>Todo texto nace<br>de más de un género.</h1>
+    <p>Este ejercicio propone ocho preguntas sobre cómo piensa, suena y se organiza su escritura. Cada respuesta es, a la vez, una elección y una frase: al final, las ocho se unen en un párrafo que describe su proyecto — y revelan qué géneros literarios lo atraviesan.</p>
+    <p>No hay respuestas correctas. Elija lo que más se parezca a lo que usted ya escribe, o a lo que quisiera escribir.</p>
+    <div class="genre-tags">
+      <span class="genre-tag">Cuento</span>
+      <span class="genre-tag">Novela</span>
+      <span class="genre-tag">Crónica / No ficción</span>
+      <span class="genre-tag">Poesía</span>
+      <span class="genre-tag">Ensayo</span>
+      <span class="genre-tag">Autoficción</span>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">Comenzar</button>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="screen-quiz">
+    <div class="q-number mono" id="qNumber">Pregunta 1 de 8</div>
+    <h2 class="q-text" id="qText"></h2>
+    <div class="options" id="qOptions"></div>
+    <div class="quiz-nav">
+      <button class="back-btn" id="backBtn" onclick="goBack()">&larr; Atrás</button>
+      <div></div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="screen-result">
+    <div class="paragraph-panel">
+      <div class="label">Su párrafo</div>
+      <p id="finalParagraph"></p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="diag" onclick="showTab('diag')">Diagnóstico</button>
+      <button class="tab-btn" data-tab="cuadro" onclick="showTab('cuadro')">Cuadro de respuestas</button>
+      <button class="tab-btn" data-tab="generos" onclick="showTab('generos')">Los seis géneros</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-diag">
+      <div class="genre-bars" id="genreBars"></div>
+      <div class="diag-block">
+        <div class="diag-kicker">El centro</div>
+        <p id="diagCentro"></p>
+      </div>
+      <div class="diag-block" id="diagCruceWrap">
+        <div class="diag-kicker">El cruce</div>
+        <p id="diagCruce"></p>
+      </div>
+      <div class="diag-block" id="diagAusenciaWrap">
+        <div class="diag-kicker">Territorio no explorado</div>
+        <p id="diagAusencia"></p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-cuadro">
+      <table class="answers">
+        <thead>
+          <tr><th>#</th><th>Respuesta</th><th>Género</th></tr>
+        </thead>
+        <tbody id="answersBody"></tbody>
+      </table>
+    </div>
+
+    <div class="tab-panel" id="tab-generos"></div>
+
+    <div class="restart-row">
+      <button class="btn-ghost" onclick="restart()">Empezar de nuevo</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============ DATOS ============ */
+
+const GENRES = {
+  cuento:       { name:"Cuento",                var:"--c-cuento" },
+  novela:       { name:"Novela",                var:"--c-novela" },
+  cronica:      { name:"Crónica / No ficción",  var:"--c-cronica" },
+  poesia:       { name:"Poesía",                var:"--c-poesia" },
+  ensayo:       { name:"Ensayo",                var:"--c-ensayo" },
+  autoficcion:  { name:"Autoficción",           var:"--c-autoficcion" }
+};
+const GENRE_ORDER = ["cuento","novela","cronica","poesia","ensayo","autoficcion"];
+
+const QUESTIONS = [
+{
+  text:"¿Qué extensión e intención tiene tu proyecto de escritura?",
+  options:[
+    {letter:"A", text:"Tiene base real, pero con estilo narrativo.", genre:"cronica"},
+    {letter:"B", text:"Es cambiante, híbrida, no necesariamente breve ni extensa.", genre:"autoficcion"},
+    {letter:"C", text:"De longitud variable, articulado por ideas.", genre:"ensayo"},
+    {letter:"D", text:"Es breve o fragmentaria, enfocada en la intensidad.", genre:"poesia"},
+    {letter:"E", text:"Es extensa, con múltiples personajes y capas temporales.", genre:"novela"},
+    {letter:"F", text:"Es breve, con estructura clara y foco en una situación.", genre:"cuento"}
+  ]
+},
+{
+  text:"¿Desde dónde se construye la voz del texto?",
+  options:[
+    {letter:"A", text:"Desde voces múltiples o un narrador complejo.", genre:"novela"},
+    {letter:"B", text:"Desde una voz lírica íntima o abstracta.", genre:"poesia"},
+    {letter:"C", text:"Desde un yo que observa y cuenta lo que vio o vivió.", genre:"cronica"},
+    {letter:"D", text:"Desde una voz reflexiva y argumentativa.", genre:"ensayo"},
+    {letter:"E", text:"Desde un yo que se expone y se transforma.", genre:"autoficcion"},
+    {letter:"F", text:"Desde una voz narrativa que desaparece tras los hechos.", genre:"cuento"}
+  ]
+},
+{
+  text:"¿Cuál es el enfoque principal de tu narración?",
+  options:[
+    {letter:"A", text:"Exploro conceptos, experiencias, lecturas.", genre:"ensayo"},
+    {letter:"B", text:"Exploro un instante o un cambio significativo.", genre:"cuento"},
+    {letter:"C", text:"Exploro estados del alma, imágenes o sensaciones.", genre:"poesia"},
+    {letter:"D", text:"Exploro relaciones, evolución de personajes y conflictos largos.", genre:"novela"},
+    {letter:"E", text:"Exploro lo cotidiano con mirada crítica o poética.", genre:"cronica"},
+    {letter:"F", text:"Exploro mi experiencia y cómo se vuelve narración.", genre:"autoficcion"}
+  ]
+},
+{
+  text:"¿Qué tipo de lenguaje predomina en tu texto?",
+  options:[
+    {letter:"A", text:"Directo, descriptivo, a veces coloquial.", genre:"cronica"},
+    {letter:"B", text:"Claro, preciso, directo, sin ornamentos.", genre:"cuento"},
+    {letter:"C", text:"Narrativo, con descripciones, diálogos y ritmo sostenido.", genre:"novela"},
+    {letter:"D", text:"Íntimo, ambiguo, entre confesión y artificio.", genre:"autoficcion"},
+    {letter:"E", text:"Analítico, con digresiones y comparaciones.", genre:"ensayo"},
+    {letter:"F", text:"Musical, simbólico, condensado.", genre:"poesia"}
+  ]
+},
+{
+  text:"¿Qué relación tiene tu proyecto con la realidad?",
+  options:[
+    {letter:"A", text:"Parte de lo real y busca pensarlo a fondo.", genre:"ensayo"},
+    {letter:"B", text:"Totalmente inventado, sin conexión con lo personal o lo real.", genre:"cuento"},
+    {letter:"C", text:"Parte de la vida propia, pero la modifica.", genre:"autoficcion"},
+    {letter:"D", text:"Comienza en lo real pero se transforma en ficción total.", genre:"novela"},
+    {letter:"E", text:"Basado en hechos reales, con elementos subjetivos.", genre:"cronica"},
+    {letter:"F", text:"Se alimenta de la emoción, no de los hechos.", genre:"poesia"}
+  ]
+},
+{
+  text:"¿Cómo está organizada la estructura de tu texto?",
+  options:[
+    {letter:"A", text:"Fragmentaria, episódica, a veces cronológica.", genre:"autoficcion"},
+    {letter:"B", text:"Inicio, desarrollo y final definidos.", genre:"cuento"},
+    {letter:"C", text:"Organización libre, a veces sin estructura aparente.", genre:"poesia"},
+    {letter:"D", text:"Estructura lógica, aunque puede divagar.", genre:"ensayo"},
+    {letter:"E", text:"Estructura flexible según el evento narrado.", genre:"cronica"},
+    {letter:"F", text:"Estructura abierta, con tramas entrelazadas o progresivas.", genre:"novela"}
+  ]
+},
+{
+  text:"¿Qué tipo de lector imaginas?",
+  options:[
+    {letter:"A", text:"Un lector que busca una historia concentrada y eficaz.", genre:"cuento"},
+    {letter:"B", text:"Un lector interesado en lo íntimo o lo ambiguo.", genre:"autoficcion"},
+    {letter:"C", text:"Un lector que quiere pensar junto al autor.", genre:"ensayo"},
+    {letter:"D", text:"Un lector curioso por lo real o lo vivido.", genre:"cronica"},
+    {letter:"E", text:"Un lector que quiere sumergirse en un mundo.", genre:"novela"},
+    {letter:"F", text:"Un lector sensible al ritmo y a la metáfora.", genre:"poesia"}
+  ]
+},
+{
+  text:"¿Cuál es el motor profundo de tu escritura?",
+  options:[
+    {letter:"A", text:"Transformar lo vivido en otra cosa, al escribirlo.", genre:"autoficcion"},
+    {letter:"B", text:"Nombrar lo innombrable desde el cuerpo o la emoción.", genre:"poesia"},
+    {letter:"C", text:"Dar cuenta de algo que pasó y merece contarse.", genre:"cronica"},
+    {letter:"D", text:"Comprender algo desde múltiples perspectivas.", genre:"ensayo"},
+    {letter:"E", text:"Explorar un universo narrativo durante largo tiempo.", genre:"novela"},
+    {letter:"F", text:"Contar algo que ocurre en un momento decisivo.", genre:"cuento"}
+  ]
+}
+];
+
+const GENRE_PROFILES = {
+  cuento:[
+    "Es breve, con estructura clara y foco en una situación.",
+    "Desde una voz narrativa que desaparece tras los hechos.",
+    "Exploro un instante o un cambio significativo.",
+    "Claro, preciso, directo, sin ornamentos.",
+    "Totalmente inventado, sin conexión con lo personal o lo real.",
+    "Inicio, desarrollo y final definidos.",
+    "Un lector que busca una historia concentrada y eficaz.",
+    "Contar algo que ocurre en un momento decisivo."
+  ],
+  novela:[
+    "Es extensa, con múltiples personajes y capas temporales.",
+    "Desde voces múltiples o un narrador complejo.",
+    "Exploro relaciones, evolución de personajes y conflictos largos.",
+    "Narrativo, con descripciones, diálogos y ritmo sostenido.",
+    "Comienza en lo real pero se transforma en ficción total.",
+    "Estructura abierta, con tramas entrelazadas o progresivas.",
+    "Un lector que quiere sumergirse en un mundo.",
+    "Explorar un universo narrativo durante largo tiempo."
+  ],
+  cronica:[
+    "Tiene base real, pero con estilo narrativo.",
+    "Desde un yo que observa y cuenta lo que vio o vivió.",
+    "Exploro lo cotidiano con mirada crítica o poética.",
+    "Directo, descriptivo, a veces coloquial.",
+    "Basado en hechos reales, con elementos subjetivos.",
+    "Estructura flexible según el evento narrado.",
+    "Un lector curioso por lo real o lo vivido.",
+    "Dar cuenta de algo que pasó y merece contarse."
+  ],
+  poesia:[
+    "Es breve o fragmentaria, enfocada en la intensidad.",
+    "Desde una voz lírica íntima o abstracta.",
+    "Exploro estados del alma, imágenes o sensaciones.",
+    "Musical, simbólico, condensado.",
+    "Se alimenta de la emoción, no de los hechos.",
+    "Organización libre, a veces sin estructura aparente.",
+    "Un lector sensible al ritmo y a la metáfora.",
+    "Nombrar lo innombrable desde el cuerpo o la emoción."
+  ],
+  ensayo:[
+    "De longitud variable, articulado por ideas.",
+    "Desde una voz reflexiva y argumentativa.",
+    "Exploro conceptos, experiencias, lecturas.",
+    "Analítico, con digresiones y comparaciones.",
+    "Parte de lo real y busca pensarlo a fondo.",
+    "Estructura lógica, aunque puede divagar.",
+    "Un lector que quiere pensar junto al autor.",
+    "Comprender algo desde múltiples perspectivas."
+  ],
+  autoficcion:[
+    "Es cambiante, híbrida, no necesariamente breve ni extensa.",
+    "Desde un yo que se expone y se transforma.",
+    "Exploro mi experiencia y cómo se vuelve narración.",
+    "Íntimo, ambiguo, entre confesión y artificio.",
+    "Parte de la vida propia, pero la modifica.",
+    "Fragmentaria, episódica, a veces cronológica.",
+    "Un lector interesado en lo íntimo o lo ambiguo.",
+    "Transformar lo vivido en otra cosa, al escribirlo."
+  ]
+};
+
+const CAPA1_MONO = {
+  cuento:"Esta escritura tiene una identidad nítida: busca la situación concentrada, el gesto que basta. No necesita ambientar un mundo entero para producir un efecto — le alcanza un instante bien construido.",
+  novela:"Esta escritura piensa en términos de duración y de mundo. No le interesa el instante aislado sino lo que ocurre cuando varias vidas se cruzan durante un tiempo largo.",
+  cronica:"Esta escritura no puede desprenderse de lo real. Necesita que algo haya ocurrido efectivamente para tener permiso de contarlo — y aun así, lo cuenta con las herramientas del relato.",
+  poesia:"Esta escritura no busca explicar sino nombrar. Le interesa menos el argumento que la textura: el ritmo, la imagen, lo que no se deja decir del todo.",
+  ensayo:"Esta escritura piensa mientras escribe. No parte de una tesis cerrada sino de una pregunta que se persigue, se rodea, se pone a prueba en el propio acto de escribir.",
+  autoficcion:"Esta escritura vive en la frontera entre lo vivido y lo inventado, y no tiene ningún interés en resolver esa ambigüedad. Contar la propia vida es, aquí, siempre una forma de transformarla."
+};
+
+const CAPA1_ACCENT_INTRO = "Hay un centro claro en esta escritura, aunque no exclusivo. ";
+const CAPA1_BIGEN_INTRO = "No hay aquí una sola tradición dominante, sino dos que negocian el mismo territorio. ";
+const CAPA1_DISPERSO = "Esta es una escritura todavía en estado de búsqueda: no se ha decantado por una forma porque probablemente las está probando todas. Eso no es indecisión — es una etapa necesaria antes de que una voz se reconozca a sí misma.";
+
+const CAPA3_AUSENCIA = {
+  cuento:"el Cuento — todavía no ha explorado la concentración extrema: la idea de que una sola situación, bien cortada, puede bastarse a sí misma.",
+  novela:"la Novela — todavía no ha probado la amplitud: dejar que una historia crezca durante el tiempo que necesite, sin apurar su cierre.",
+  cronica:"la Crónica / No ficción — todavía no ha puesto a prueba su relación directa con lo real narrado tal como ocurrió, sin el amparo de la ficción.",
+  poesia:"la Poesía — todavía no ha entrado en el territorio donde no hace falta explicar, solo nombrar, sugerir, condensar.",
+  ensayo:"el Ensayo — todavía no ha convertido sus preguntas en el motor explícito de un texto: pensar en voz alta, sin narrar nada más que una idea.",
+  autoficcion:"la Autoficción — todavía no ha buscado exponerse directamente en lo que escribe, dejando que la propia vida sea materia visible del texto."
+};
+
+function pairKey(a,b){ return [a,b].sort().join("|"); }
+
+const PAIR_TEXTS = {};
+PAIR_TEXTS[pairKey("cuento","novela")] = "Ambos comparten el oficio de narrar hechos, pero disienten en la escala. Es posible que esta escritura sepa concentrar una escena con precisión de cuentista, y al mismo tiempo sienta el impulso de dejarla crecer más allá de sus límites naturales.";
+PAIR_TEXTS[pairKey("cuento","cronica")] = "El cuento aporta la estructura cerrada; la crónica, el anclaje en lo real. Esta escritura probablemente sabe reconocer, dentro de la experiencia vivida, el instante exacto que merece ser contado — y lo corta con la precisión de quien sabe dónde empieza y dónde termina una historia.";
+PAIR_TEXTS[pairKey("cuento","poesia")] = "Los dos géneros de la condensación se encuentran aquí. Esta escritura busca la eficacia y, al mismo tiempo, desconfía de decirlo todo: prefiere sugerir antes que explicar, incluso dentro de una estructura narrativa.";
+PAIR_TEXTS[pairKey("cuento","ensayo")] = "Una tensión poco común: la voz que narra convive con la voz que piensa. Es probable que detrás de cada situación contada haya, latente, una idea que el relato no necesita explicitar pero que lo organiza desde adentro.";
+PAIR_TEXTS[pairKey("cuento","autoficcion")] = "El cuento ficcionaliza; la autoficción se expone. Esta escritura podría estar usando la distancia de la ficción para decir algo que, en el fondo, es demasiado propio para contarse sin ese disfraz.";
+PAIR_TEXTS[pairKey("novela","cronica")] = "El impulso narrativo extenso se encuentra con la fidelidad a lo real. Esta escritura quizás quiera construir un mundo amplio, pero sin renunciar a que ese mundo esté anclado en hechos verificables o vividos.";
+PAIR_TEXTS[pairKey("novela","ensayo")] = "La necesidad de contar convive con la necesidad de comprender. Es posible que esta escritura no se conforme con que los personajes actúen: también necesita que su historia sirva para pensar algo más grande que ellos.";
+PAIR_TEXTS[pairKey("novela","autoficcion")] = "El deseo de construir un mundo extenso se cruza con la exposición de lo propio. Esta escritura podría estar convirtiendo la propia vida en materia narrativa, pero dándole la amplitud y la autonomía de una ficción completa.";
+PAIR_TEXTS[pairKey("cronica","poesia")] = "Lo real y lo lírico rara vez se buscan, pero aquí conviven. Esta escritura parece necesitar que los hechos sean ciertos, y al mismo tiempo no se conforma con narrarlos: quiere tocar lo que en ellos no se deja explicar del todo.";
+PAIR_TEXTS[pairKey("cronica","autoficcion")] = "Ambas parten de lo vivido, pero con un grado distinto de fidelidad. Esta escritura probablemente oscila entre el compromiso de contar lo que realmente ocurrió y la libertad de transformarlo cuando la experiencia lo exige.";
+PAIR_TEXTS[pairKey("poesia","ensayo")] = "La imagen y el concepto se encuentran en un mismo impulso. Esta escritura podría estar pensando en imágenes, o sintiendo sus ideas — dos maneras de llamarle a lo mismo: una inteligencia que no separa lo sensible de lo reflexivo.";
+PAIR_TEXTS[pairKey("poesia","autoficcion")] = "Ambas viven cerca del cuerpo y de la emoción no resuelta. Esta escritura quizás no busque contar una historia sino nombrar un estado — y hacerlo desde una intimidad que no necesita ficcionalizarse del todo para doler o iluminar.";
+PAIR_TEXTS[pairKey("ensayo","autoficcion")] = "Pensar y exponerse convergen aquí. Esta escritura probablemente no puede separar la reflexión de la experiencia que la origina: piensa porque algo le ocurrió, y necesita contar lo que le ocurrió para terminar de entenderlo.";
+PAIR_TEXTS[pairKey("novela","poesia")] = "Hay en esta escritura una tensión fértil entre la necesidad de construir un mundo extenso y poblado, y la urgencia de detenerse en la imagen o el instante que condensa todo. Es posible que sus personajes no solo actúen: que también respiren con un ritmo casi lírico.";
+PAIR_TEXTS[pairKey("cronica","ensayo")] = "Esta escritura parte de lo real, pero no se conforma con narrarlo: quiere pensarlo. Es probable que detrás de cada hecho que cuenta haya una pregunta que la persigue más que el hecho mismo.";
+
+/* ============ ESTADO ============ */
+let current = 0;
+let answers = new Array(8).fill(null); // {letter, genre, text}
+
+/* ============ NAVEGACIÓN PANTALLAS ============ */
+function showScreen(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function startQuiz(){
+  current = 0;
+  answers = new Array(8).fill(null);
+  showScreen("screen-quiz");
+  document.getElementById("progressTrack").classList.add("show");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  document.getElementById("qNumber").textContent = "Pregunta " + (current+1) + " de 8";
+  document.getElementById("qText").textContent = q.text;
+  document.getElementById("progressLabel").textContent = (current+1) + " / 8";
+  document.getElementById("progressFill").style.width = ((current)/8*100) + "%";
+
+  const opWrap = document.getElementById("qOptions");
+  opWrap.innerHTML = "";
+  q.options.forEach(opt=>{
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.innerHTML = '<span class="letter mono">'+opt.letter+'</span><span>'+opt.text+'</span>';
+    btn.onclick = ()=>selectOption(opt);
+    opWrap.appendChild(btn);
+  });
+
+  document.getElementById("backBtn").disabled = (current===0);
+}
+
+function selectOption(opt){
+  answers[current] = opt;
+  if(current < 7){
+    current++;
+    renderQuestion();
+  } else {
+    document.getElementById("progressFill").style.width = "100%";
+    document.getElementById("progressLabel").textContent = "8 / 8";
+    setTimeout(()=>{
+      document.getElementById("progressTrack").classList.remove("show");
+      renderResult();
+      showScreen("screen-result");
+      window.scrollTo(0,0);
+    }, 180);
+  }
+}
+
+function goBack(){
+  if(current===0) return;
+  current--;
+  renderQuestion();
+}
+
+function restart(){
+  showScreen("screen-intro");
+  document.getElementById("progressTrack").classList.remove("show");
+  window.scrollTo(0,0);
+}
+
+/* ============ RESULTADO ============ */
+function renderResult(){
+  // parrafo
+  const paragraph = answers.map(a=>a.text).join(" ");
+  document.getElementById("finalParagraph").textContent = paragraph;
+
+  // conteo
+  const counts = {};
+  GENRE_ORDER.forEach(g=>counts[g]=0);
+  answers.forEach(a=>counts[a.genre]++);
+
+  // barras
+  const barsWrap = document.getElementById("genreBars");
+  barsWrap.innerHTML = "";
+  GENRE_ORDER.forEach(g=>{
+    const pct = (counts[g]/8*100);
+    const row = document.createElement("div");
+    row.className = "genre-bar-row";
+    row.innerHTML =
+      '<div class="genre-bar-name">'+GENRES[g].name+'</div>'+
+      '<div class="genre-bar-track"><div class="genre-bar-fill" style="width:'+pct+'%; background:var('+GENRES[g].var+')"></div></div>'+
+      '<div class="genre-bar-count">'+counts[g]+'</div>';
+    barsWrap.appendChild(row);
+  });
+
+  // diagnostico
+  const sorted = GENRE_ORDER.slice().sort((a,b)=>counts[b]-counts[a]);
+  const top = sorted[0];
+  const topCount = counts[top];
+  const tiedTop = GENRE_ORDER.filter(g=>counts[g]===topCount);
+
+  let centro = "", cruce = "", cruceVisible = true;
+
+  if(topCount >= 5){
+    centro = CAPA1_MONO[top];
+    cruceVisible = false;
+  } else if(tiedTop.length >= 2 && topCount >= 3){
+    const g1 = tiedTop[0], g2 = tiedTop[1];
+    centro = CAPA1_BIGEN_INTRO;
+    cruce = PAIR_TEXTS[pairKey(g1,g2)];
+  } else if(topCount <= 2){
+    centro = CAPA1_DISPERSO;
+    cruceVisible = false;
+  } else {
+    const second = sorted[1];
+    centro = CAPA1_ACCENT_INTRO;
+    cruce = PAIR_TEXTS[pairKey(top, second)];
+  }
+
+  document.getElementById("diagCentro").textContent = centro;
+  document.getElementById("diagCruceWrap").style.display = cruceVisible ? "block" : "none";
+  if(cruceVisible) document.getElementById("diagCruce").textContent = cruce;
+
+  const absentGenres = GENRE_ORDER.filter(g=>counts[g]===0);
+  const ausWrap = document.getElementById("diagAusenciaWrap");
+  if(absentGenres.length===0){
+    ausWrap.style.display = "none";
+  } else {
+    ausWrap.style.display = "block";
+    const texto = "Esta escritura, por ahora, no ha pasado por " +
+      absentGenres.map(g=>CAPA3_AUSENCIA[g]).join(" Tampoco por ");
+    document.getElementById("diagAusencia").textContent = texto;
+  }
+
+  // cuadro de respuestas
+  const tbody = document.getElementById("answersBody");
+  tbody.innerHTML = "";
+  answers.forEach((a,i)=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td>P'+(i+1)+'</td>'+
+      '<td>'+a.text+'</td>'+
+      '<td><span class="chip" style="background:var('+GENRES[a.genre].var+')">'+GENRES[a.genre].name+'</span></td>';
+    tbody.appendChild(tr);
+  });
+
+  // generos accordion
+  const gWrap = document.getElementById("tab-generos");
+  gWrap.innerHTML = "";
+  GENRE_ORDER.forEach(g=>{
+    const card = document.createElement("div");
+    card.className = "genre-card";
+    const bodyId = "gbody-"+g;
+    card.innerHTML =
+      '<button class="genre-head" onclick="toggleGenre(\''+g+'\')">'+
+        '<span class="genre-head-left"><span class="dot" style="background:var('+GENRES[g].var+')"></span>'+GENRES[g].name+'</span>'+
+        '<span class="chev mono" id="chev-'+g+'">+</span>'+
+      '</button>'+
+      '<div class="genre-body" id="'+bodyId+'"><ol>'+
+        GENRE_PROFILES[g].map(t=>'<li>'+t+'</li>').join('')+
+      '</ol></div>';
+    gWrap.appendChild(card);
+  });
+}
+
+function toggleGenre(g){
+  const body = document.getElementById("gbody-"+g);
+  const chev = document.getElementById("chev-"+g);
+  const open = body.classList.toggle("open");
+  chev.textContent = open ? "–" : "+";
+}
+
+function showTab(tab){
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("tab-"+tab).classList.add("active");
+}
+</script>
+</body>
+</html>
